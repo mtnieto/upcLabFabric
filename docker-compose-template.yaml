@@ -1,0 +1,152 @@
+version: '2'
+
+services:
+  caFis:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-fis
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.fis.upc.edu-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.fis.upc.edu-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/fis.upc.edu/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerfis
+
+  caMat:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-mat
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.mat.upc.edu-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mat.upc.edu-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/mat.upc.edu/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peermat
+  
+  caDac:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-dac
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.dac.upc.edu-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.dac.upc.edu-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/dac.upc.edu/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerdac
+  
+  caEntel:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-entel
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.entel.upc.edu-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA4_PRIVATE_KEY
+    ports:
+      - "10054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.entel.upc.edu-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA4_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/entel.upc.edu/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerentel
+    
+
+  orderer.upc.edu:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.upc.edu
+    container_name: orderer.upc.edu
+
+  peer0.fis.upc.edu:
+    container_name: peer0.fis.upc.edu
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.fis.upc.edu
+  peer2.fis.upc.edu:
+    container_name: peer2.fis.upc.edu
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer2.fis.upc.edu
+  peer1.fis.upc.edu:
+    container_name: peer1.fis.upc.edu
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.fis.upc.edu
+
+  peer0.mat.upc.edu:
+    container_name: peer0.mat.upc.edu
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.mat.upc.edu
+
+  peer1.mat.upc.edu:
+    container_name: peer1.mat.upc.edu
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.mat.upc.edu
+  
+  peer0.dac.upc.edu:
+    container_name: peer0.dac.upc.edu
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.dac.upc.edu
+
+  peer1.dac.upc.edu:
+    container_name: peer1.dac.upc.edu
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.dac.upc.edu
+  
+  peer0.entel.upc.edu:
+    container_name: peer0.entel.upc.edu
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.entel.upc.edu
+
+  peer1.entel.upc.edu:
+    container_name: peer1.entel.upc.edu
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.entel.upc.edu
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.fis.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=fisMSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/fis.upc.edu/peers/peer0.fis.upc.edu/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/fis.upc.edu/peers/peer0.fis.upc.edu/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/fis.upc.edu/peers/peer0.fis.upc.edu/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/fis.upc.edu/users/Admin@fis.upc.edu/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    #command: /bin/bash -c './scripts/script.sh ${CHANNEL_NAME}; sleep $TIMEOUT'
+    volumes:
+        - /var/run/:/host/var/run/
+        - $GOPATH/src/github.com/hlf-go/example-chaincodes/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer.upc.edu
+      - peer0.fis.upc.edu
+      - peer1.fis.upc.edu
+      - peer0.mat.upc.edu
+      - peer1.mat.upc.edu

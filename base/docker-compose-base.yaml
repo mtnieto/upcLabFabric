@@ -1,0 +1,213 @@
+version: '2'
+
+services:
+
+  orderer.upc.edu:
+    container_name: orderer.upc.edu
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../crypto-config/ordererOrganizations/upc.edu/orderers/orderer.upc.edu/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/upc.edu/orderers/orderer.upc.edu/tls/:/var/hyperledger/orderer/tls
+    ports:
+      - 7050:7050
+
+  peer0.fis.upc.edu:
+    container_name: peer0.fis.upc.edu
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.fis.upc.edu
+      - CORE_PEER_ADDRESS=peer0.fis.upc.edu:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.fis.upc.edu:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.fis.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=fisMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer0.fis.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer0.fis.upc.edu/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 7051:7051
+      - 7052:7052
+      - 7053:7053
+
+  peer1.fis.upc.edu:
+    container_name: peer1.fis.upc.edu
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.fis.upc.edu
+      - CORE_PEER_ADDRESS=peer1.fis.upc.edu:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer1.fis.upc.edu:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.fis.upc.edu:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.fis.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=fisMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer1.fis.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer1.fis.upc.edu/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 8051:7051
+      - 8052:7052
+      - 8053:7053
+  peer2.fis.upc.edu:
+    container_name: peer2.fis.upc.edu
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer2.fis.upc.edu
+      - CORE_PEER_ADDRESS=peer2.fis.upc.edu:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer2.fis.upc.edu:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.fis.upc.edu:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.fis.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=fisMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer1.fis.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer1.fis.upc.edu/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 15051:7051
+      - 15052:7052
+      - 15053:7053
+
+  peer0.mat.upc.edu:
+    container_name: peer0.mat.upc.edu
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.mat.upc.edu
+      - CORE_PEER_ADDRESS=peer0.mat.upc.edu:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.mat.upc.edu:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.mat.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=matMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/mat.upc.edu/peers/peer0.mat.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/mat.upc.edu/peers/peer0.mat.upc.edu/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 9051:7051
+      - 9052:7052
+      - 9053:7053
+
+  peer1.mat.upc.edu:
+    container_name: peer1.mat.upc.edu
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.mat.upc.edu
+      - CORE_PEER_ADDRESS=peer1.mat.upc.edu:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer1.mat.upc.edu:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.mat.upc.edu:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.mat.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=matMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/mat.upc.edu/peers/peer1.mat.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/mat.upc.edu/peers/peer1.mat.upc.edu/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 10051:7051
+      - 10052:7052
+      - 10053:7053
+
+  peer0.dac.upc.edu:
+    container_name: peer0.dac.upc.edu
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.dac.upc.edu
+      - CORE_PEER_ADDRESS=peer0.dac.upc.edu:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.dac.upc.edu:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dac.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=dacMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/dac.upc.edu/peers/peer0.dac.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/dac.upc.edu/peers/peer0.dac.upc.edu/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 11051:7051
+      - 11052:7052
+      - 11053:7053
+
+  peer1.dac.upc.edu:
+    container_name: peer1.dac.upc.edu
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.dac.upc.edu
+      - CORE_PEER_ADDRESS=peer1.dac.upc.edu:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer1.dac.upc.edu:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.dac.upc.edu:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.dac.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=dacMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/dac.upc.edu/peers/peer1.dac.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/dac.upc.edu/peers/peer1.dac.upc.edu/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 12051:7051
+      - 12052:7052
+      - 12053:7053
+
+  peer0.entel.upc.edu:
+    container_name: peer0.entel.upc.edu
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.entel.upc.edu
+      - CORE_PEER_ADDRESS=peer0.entel.upc.edu:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.entel.upc.edu:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.entel.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=entelMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/entel.upc.edu/peers/peer0.entel.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/entel.upc.edu/peers/peer0.entel.upc.edu/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 13051:7051
+      - 13052:7052
+      - 13053:7053
+
+  peer1.entel.upc.edu:
+    container_name: peer1.entel.upc.edu
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.entel.upc.edu
+      - CORE_PEER_ADDRESS=peer1.entel.upc.edu:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer1.entel.upc.edu:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.entel.upc.edu:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.entel.upc.edu:7051
+      - CORE_PEER_LOCALMSPID=entelMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/entel.upc.edu/peers/peer1.entel.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/entel.upc.edu/peers/peer1.entel.upc.edu/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 14051:7051
+      - 14052:7052
+      - 14053:7053
