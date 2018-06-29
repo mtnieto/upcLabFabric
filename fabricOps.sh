@@ -143,7 +143,7 @@ function cleanNetwork() {
     # This operations removes all docker containers and images regardless
     #
     docker rm -f $(docker ps -aq)
-    docker rmi -f $(docker images -q)
+ #   docker rmi -f $(docker images -q)
     
     # This removes containers used to support the running chaincode.
     #docker rm -f $(docker ps --filter "name=dev" --filter "name=peer0.fis.upc.edu" --filter "name=cli" --filter "name=orderer.upc.edu" -q)
