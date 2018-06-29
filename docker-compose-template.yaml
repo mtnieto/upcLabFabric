@@ -73,16 +73,16 @@ services:
     extends:
       file:  base/docker-compose-base.yaml
       service: peer0.fis.upc.edu
-  peer2.fis.upc.edu:
-    container_name: peer2.fis.upc.edu
-    extends:
-      file:  base/docker-compose-base.yaml
-      service: peer2.fis.upc.edu
-  peer1.fis.upc.edu:
-    container_name: peer1.fis.upc.edu
-    extends:
-      file:  base/docker-compose-base.yaml
-      service: peer1.fis.upc.edu
+  # peer2.fis.upc.edu:
+  #   container_name: peer2.fis.upc.edu
+  #   extends:
+  #     file:  base/docker-compose-base.yaml
+  #     service: peer2.fis.upc.edu
+  # peer1.fis.upc.edu:
+  #   container_name: peer1.fis.upc.edu
+  #   extends:
+  #     file:  base/docker-compose-base.yaml
+  #     service: peer1.fis.upc.edu
 
   peer0.mat.upc.edu:
     container_name: peer0.mat.upc.edu
@@ -90,11 +90,11 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer0.mat.upc.edu
 
-  peer1.mat.upc.edu:
-    container_name: peer1.mat.upc.edu
-    extends:
-      file:  base/docker-compose-base.yaml
-      service: peer1.mat.upc.edu
+  # peer1.mat.upc.edu:
+  #   container_name: peer1.mat.upc.edu
+  #   extends:
+  #     file:  base/docker-compose-base.yaml
+  #     service: peer1.mat.upc.edu
   
   peer0.dac.upc.edu:
     container_name: peer0.dac.upc.edu
@@ -102,11 +102,11 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer0.dac.upc.edu
 
-  peer1.dac.upc.edu:
-    container_name: peer1.dac.upc.edu
-    extends:
-      file:  base/docker-compose-base.yaml
-      service: peer1.dac.upc.edu
+  # peer1.dac.upc.edu:
+  #   container_name: peer1.dac.upc.edu
+  #   extends:
+  #     file:  base/docker-compose-base.yaml
+  #     service: peer1.dac.upc.edu
   
   peer0.entel.upc.edu:
     container_name: peer0.entel.upc.edu
@@ -114,11 +114,11 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer0.entel.upc.edu
 
-  peer1.entel.upc.edu:
-    container_name: peer1.entel.upc.edu
-    extends:
-      file:  base/docker-compose-base.yaml
-      service: peer1.entel.upc.edu
+  # peer1.entel.upc.edu:
+  #   container_name: peer1.entel.upc.edu
+  #   extends:
+  #     file:  base/docker-compose-base.yaml
+  #     service: peer1.entel.upc.edu
 
   cli:
     container_name: cli
@@ -140,20 +140,19 @@ services:
     command: /bin/bash -c './scripts/script.sh'
     volumes:
         - /var/run/:/host/var/run/
-        - $GOPATH/src/github.com/hlf-go/example-chaincodes/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-        - ./chaincodes/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+        - ./chaincodes:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
       - orderer.upc.edu
       - peer0.fis.upc.edu
-      - peer1.fis.upc.edu
+      #- peer1.fis.upc.edu
       - peer0.mat.upc.edu
-      - peer1.mat.upc.edu
+     # - peer1.mat.upc.edu
       - peer0.dac.upc.edu
-      - peer1.dac.upc.edu
-      - peer2.fis.upc.edu
-      - peer1.entel.upc.edu
+     # - peer1.dac.upc.edu
+     # - peer2.fis.upc.edu
+     # - peer1.entel.upc.edu
       - peer0.entel.upc.edu
   
