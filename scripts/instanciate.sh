@@ -7,5 +7,5 @@ CHANNEL_NAME=channelgeneral
 CORE_PEER_TLS_ENABLED=true
 
 
-peer chaincode instantiate -o orderer.myapp.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycontract -v 1.0 -c '{"Args":["init","a","100","b","200"]}' >&log.txt
+peer chaincode instantiate -o orderer.upc.edu:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycontract -v 1.0 -c '{"Args":["init","a","100","b","200"]}' >&log.txt
 cat log.txt
