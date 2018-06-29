@@ -30,6 +30,22 @@ Profiles:
                 - *dac
                 - *entel
                 - *fis
+    canal0:
+        Consortium: UpcConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *mat
+                - *dac
+                - *fis
+    
+    canal1:
+        Consortium: UpcConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *entel
+                - *fis
 
 ################################################################################
 #

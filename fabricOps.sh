@@ -102,6 +102,8 @@ function generateChannelArtifacts(){
 	echo "#######    Generating anchor peer update for fisMSP   ##########"
 	echo "#################################################################"
     $GOPATH/bin/configtxgen -profile general -outputCreateChannelTx ./channel-artifacts/channelgeneral.tx -channelID "channelgeneral"
+    $GOPATH/bin/configtxgen -profile canal0 -outputCreateChannelTx ./channel-artifacts/canal0.tx -channelID "canal0"
+    $GOPATH/bin/configtxgen -profile canal1 -outputCreateChannelTx ./channel-artifacts/canal1.tx -channelID "canal1"
 
 }
 

@@ -81,8 +81,8 @@ services:
       - CORE_PEER_LOCALMSPID=fisMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer1.fis.upc.edu/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer1.fis.upc.edu/tls:/etc/hyperledger/fabric/tls
+        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer2.fis.upc.edu/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/fis.upc.edu/peers/peer2.fis.upc.edu/tls:/etc/hyperledger/fabric/tls
 
     ports:
       - 15051:7051

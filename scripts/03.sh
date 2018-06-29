@@ -9,3 +9,10 @@ CORE_PEER_TLS_ENABLED=true
 
 peer channel join -b $CHANNEL_NAME.block  >&log.txt
 cat log.txt
+
+CORE_PEER_ADDRESS=peer1.mat.upc.edu:7051
+
+echo "Join de MAT a Canal0"
+peer channel join -b canal0.block  >&log.txt
+cat log.txt
+
